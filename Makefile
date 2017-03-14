@@ -1,2 +1,3 @@
-hello:
-	@echo hello
+test:
+	go test ./syncman
+
