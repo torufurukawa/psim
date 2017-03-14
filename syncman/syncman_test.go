@@ -9,11 +9,23 @@ func TestParseFlags(t *testing.T) {
 		expected *flags
 	}{
 		{
-			args:     []string{"syncman", "-port", "6000", "-config", "config.xml"},
+			args:     []string{"syncman"},
 			expected: &flags{Port: 6000, ConfigPath: "config.xml"},
 		},
+		{
+			args:     []string{"syncman", "-port", "5000"},
+			expected: &flags{Port: 5000, ConfigPath: "config.xml"},
+		},
+		{
+			args:     []string{"syncman", "-config", "foo.xml"},
+			expected: &flags{Port: 6000, ConfigPath: "foo.xml"},
+		},
+		{
+			args:     []string{"syncman", "-port", "5000", "-config", "foo.xml"},
+			expected: &flags{Port: 5000, ConfigPath: "foo.xml"},
+		},
 	}
-	_ = fixtures
+
 	for _, f := range fixtures {
 		result := parseFlags(f.args)
 		if !eqFlags(result, f.expected) {
