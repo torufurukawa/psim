@@ -4,13 +4,21 @@ import "testing"
 import "reflect"
 
 func TestParseFlags(t *testing.T) {
-	result, err := parseFlags([]string{"syncman", "-port", "6000", "-config", "config.xml"})
-	if err != nil {
-		t.Errorf("err is %v, want nil", err)
+	var fixtures = []struct {
+		args     []string
+		expected *flags
+	}{
+		{
+			args:     []string{"syncman", "-port", "6000", "-config", "config.xml"},
+			expected: &flags{Port: 6000, ConfigPath: "config.xml"},
+		},
 	}
-	expected := &flags{Port: 6000, ConfigPath: "config.xml"}
-	if !eqFlags(result, expected) {
-		t.Errorf("result is \n%v, want \n%v", result, expected)
+	_ = fixtures
+	for _, f := range fixtures {
+		result := parseFlags(f.args)
+		if !eqFlags(result, f.expected) {
+			t.Errorf("result for %v is \n%v, want \n%v", f.args, result, f.expected)
+		}
 	}
 }
 
