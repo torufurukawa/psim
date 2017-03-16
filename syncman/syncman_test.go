@@ -1,6 +1,8 @@
 package syncman
 
 import (
+	"fmt"
+	"net"
 	"reflect"
 	"testing"
 )
@@ -37,9 +39,27 @@ func TestParseFlags(t *testing.T) {
 }
 
 func TestHaltCommand(t *testing.T) {
+	port := uint(6000)
+
 	// given: start sync manager
+	sm := newSyncManager(&settings{Port: port, ConfigPath: "config.xml"})
+	go func() {
+		sm.Run()
+	}()
+
 	// when: send HALT command
+	conn, err := net.Dial("tcp", fmt.Sprintf(":%d", port))
+	if err != nil {
+		t.Errorf("err is %v, want nil", err)
+	}
+	n, err := conn.Write([]byte("+HALT\r\n"))
+	if n != len("+HALT\r\n") {
+		t.Errorf("n is %d, want %d", n, len("+HALT\r\n"))
+	}
+
+	// then: -OK is resturend
 	// then: sync manager is stopped
+	_ = sm
 }
 
 func eqSettings(a *settings, b *settings) bool {
