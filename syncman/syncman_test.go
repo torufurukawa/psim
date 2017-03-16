@@ -57,7 +57,7 @@ func TestHaltCommand(t *testing.T) {
 		t.Errorf("n is %d, want %d", n, len("+HALT\r\n"))
 	}
 
-	// then: -OK is resturend
+	// then: +OK is resturend
 	// then: sync manager is stopped
 	_ = sm
 }
