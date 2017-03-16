@@ -10,7 +10,10 @@ func main() {
 	if len(os.Args) > 0 {
 		args = os.Args[1:]
 	}
-	_ = parseFlags(args)
+	s := parseFlags(args)
+
+	sm := newSyncManager(s)
+	sm.Run()
 }
 
 func parseFlags(args []string) *settings {
@@ -26,3 +29,12 @@ type settings struct {
 	Port       uint
 	ConfigPath string
 }
+
+type syncManager struct{}
+
+func newSyncManager(s *settings) *syncManager {
+	sm := syncManager{}
+	return &sm
+}
+
+func (sm *syncManager) Run() {}
