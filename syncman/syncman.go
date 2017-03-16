@@ -1,6 +1,17 @@
 package syncman
 
-import "flag"
+import (
+	"flag"
+	"os"
+)
+
+func main() {
+	args := make([]string, 0)
+	if len(os.Args) > 0 {
+		args = os.Args[1:]
+	}
+	_ = parseFlags(args)
+}
 
 func parseFlags(args []string) *settings {
 	s := settings{}

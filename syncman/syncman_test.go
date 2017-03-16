@@ -1,7 +1,9 @@
 package syncman
 
-import "testing"
-import "reflect"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestParseFlags(t *testing.T) {
 	var fixtures = []struct {
