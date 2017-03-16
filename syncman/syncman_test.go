@@ -36,6 +36,12 @@ func TestParseFlags(t *testing.T) {
 	}
 }
 
+func TestHaltCommand(t *testing.T) {
+	// given: start sync manager
+	// when: send HALT command
+	// then: sync manager is stopped
+}
+
 func eqSettings(a *settings, b *settings) bool {
 	return reflect.DeepEqual(a, b)
 }
