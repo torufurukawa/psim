@@ -5,6 +5,8 @@ import (
 	"net"
 	"reflect"
 	"testing"
+
+	"github.com/torufurukawa/go-resp"
 )
 
 func TestParseFlags(t *testing.T) {
@@ -38,6 +40,7 @@ func TestParseFlags(t *testing.T) {
 	}
 }
 
+// TODO: refactor
 func TestHaltCommand(t *testing.T) {
 	port := uint(6000)
 
@@ -50,7 +53,7 @@ func TestHaltCommand(t *testing.T) {
 	// when: send HALT command
 	conn, err := net.Dial("tcp", fmt.Sprintf(":%d", port))
 	if err != nil {
-		t.Errorf("err is %v, want nil", err)
+		t.Errorf("err is %#v, want nil", err)
 	}
 	n, err := conn.Write([]byte("+HALT\r\n"))
 	if n != len("+HALT\r\n") {
@@ -58,6 +61,17 @@ func TestHaltCommand(t *testing.T) {
 	}
 
 	// then: +OK is resturend
+	reader := resp.NewReader(conn)
+	obj, err := reader.ReadObject()
+	if err != nil {
+		t.Errorf("err is %#v, want nil", err)
+		return
+	}
+	s := obj.(*resp.SimpleString)
+	result := string(s.Dump())
+	if result != "+OK\\r\\n" {
+		t.Errorf("result is %#v, want OK", result)
+	}
 	// then: sync manager is stopped
 	_ = sm
 }
